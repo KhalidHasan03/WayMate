@@ -1,0 +1,17 @@
+[Unit]
+Description=WayMate queue worker
+After=network.target mysql.service redis-server.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=3
+WorkingDirectory=/var/www/waymate/backend
+ExecStart=/usr/bin/php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+StandardOutput=append:/var/log/waymate-worker.log
+StandardError=append:/var/log/waymate-worker.log
+
+[Install]
+WantedBy=multi-user.target
